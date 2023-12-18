@@ -28,6 +28,11 @@ const offerSchema = new Schema(
       type: Number,
       required: true,
     },
+
+    image: {
+      data: Buffer, // Binary data
+      contentType: String, // Type of the image (e.g., "image/jpeg")
+    },
   },
   { timestamps: true }
 );

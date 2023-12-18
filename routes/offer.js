@@ -16,7 +16,12 @@ router.get('/', getOffers)
 router.get("/:id", getOffer);
 
 // POST a new workout
-router.post('/', createOffer)
+// router.post('/', createOffer)
+const multer = require("multer");
+const upload = multer({ storage: multer.memoryStorage() });
+router.post("/", upload.single("image"), createOffer);
+
+
 
 // DELETE a workout
 router.delete("/:id", deleteOffer);

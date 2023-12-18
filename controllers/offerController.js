@@ -1,5 +1,6 @@
 const Offer = require ('../models/offerModel')
 const mongoose = require("mongoose");
+const multer = require("multer");
 
 
 // get all offers
@@ -27,29 +28,73 @@ const getOffer = async (req, res) => {
   res.status(200).json(newOffer);
 };
 
-// create offer
-const createOffer= async (req, res) => {
-  const { title, description, status, duration , budget } = req.body;
-console.log("slm");
-  // add to db
+// // create offer
+// const createOffer= async (req, res) => {
+//   const { title, description, status, duration , budget } = req.body;
+// console.log("slm");
+//   // add to db
+//   try {
+//     const newOffer = await Offer.create({
+//       title,
+//       description,
+//       status,
+//       duration,
+//       budget,
+//     });
+//      res.status(200).json({
+//        success: true,
+//        message: "Offer created successfully!",
+//        offer: newOffer,
+//      });
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+   
+//   }
+// };
+
+
+
+
+
+const createOffer = async (req, res) => {
   try {
+     console.log("req.file:", req.file);
+const { title, description, status, duration, budget } = req.body;
+
+    // Check if an image is provided
+    // if (!req.file) {
+    //   return res.status(400).json({ error: "Image is required." });
+    // }
+console.log("req.file:", req.file);
+
+    // Get image data from multer
+    const image = {
+      data: req.file.buffer,
+      contentType: req.file.mimetype,
+    };
+
+    // Create new offer with image
     const newOffer = await Offer.create({
       title,
       description,
       status,
       duration,
       budget,
+      image,
     });
-     res.status(200).json({
-       success: true,
-       message: "Offer created successfully!",
-       offer: newOffer,
-     });
+
+    res.status(200).json({
+      success: true,
+      message: "Offer created successfully!",
+      offer: newOffer,
+    });
   } catch (error) {
+    console.error("Error creating offer:", error);
     res.status(400).json({ error: error.message });
-   
   }
 };
+
+
 
 
 // delete offer
